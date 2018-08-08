@@ -1,0 +1,67 @@
+---
+title: "ggplot"
+output:
+  html_document:
+    df_print: paged
+---
+
+
+```{r}
+library(ggplot2)
+library(reshape2)
+
+cars$color <- 1:50
+cars$coche <- c("peugeot","ford")
+```
+
+Las partes habituales que ggplot utiliza para crear gráficos es la siguiente:
+
+- Datos: solo admite tablas. No puedes pasar ni vectores ni listas ni nada extraño
+
+- Estéticas, En un conjunto de datos hay columnas: edad, altura, ingresos, temperatura, etc. En un gráfico hay, en la terminología de ggplot2, estéticas. Se trata de caracteristicas que se asocian a los elementos que vamos a graficar (la posición x e y, el color, tamaño etc.).
+
+Hay alrededor de una docena de esteticas, aunque se utilizan, generalmente, menos:
+
+- x e y, distancias horizontal y vertical.
+- colour, para el color.
+- size, para el tamaño.
+- shape, que indica la forma de los puntos (cuadrados, triángulos, etc.) de los puntos o del trazo (continuo, punteado) de las líneas.
+- alpha para la transparencia: los valores más altos tendrían formas opacas y los más bajos, casi transparentes. De ahí la utilizad del canal alfa: da peso e importancia a las observaciones que la merecen.
+- fill, para el color de relleno de las formas sólidas (barras, etc.).
+
+
+- Geometrías (o capas): puntos, rectas, histogramas, densidades, etc. También se llaman capas porque pueden superponerse.
+
+
+Opcionalmente pueden tener Facetas; que parten un gráfico en subgraficos preservando las escalas.
+
+Por ejemplo:
+
+```{r}
+ggplot(cars) + aes(x = speed, y = dist, colour = color, size = speed) +
+           geom_point(shape = 1, aes(alpha = speed)) + geom_smooth(alpha = 0.2) + 
+           facet_grid( ~coche) + 
+         labs(x      = "velocidad", 
+              title  = "Esto es un prueba",
+              y      = "distancia", 
+              colour = "marca de coche") + theme_bw()+ 
+  theme(
+    panel.background = element_rect(fill = "lightblue"),
+    panel.grid.minor = element_line(linetype = "dotted")
+  )
+
+```
+
+```{r}
+ggplot(cars) + aes(x = speed) +
+           geom_bar(fill = "red") +
+           facet_wrap(~ coche)
+
+```
+
+```{r}
+ggplot(cars, aes(x = speed,fill = coche)) + geom_density(alpha = 0.3)
+
+```
+
+Una página que te ira bien es [esta.](https://ggplot2.tidyverse.org/reference/)
